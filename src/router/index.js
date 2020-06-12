@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../views/login.vue";
+import Register from "../views/register.vue";
+import Index from "../views/index.vue";
 
 Vue.use(VueRouter);
 
@@ -22,8 +24,20 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/register.vue")
+    // component: () =>
+    //   import(/* webpackChunkName: "about" */ "../views/register.vue")
+    component: Register
+  },
+  {
+    path: "/index",
+    name: "index",
+    component: Index
+  },
+  {
+    path: "/rank",
+    name: "rank",
+    component: () => 
+      import("../views/rank.vue")
   }
   
 ];

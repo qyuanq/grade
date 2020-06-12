@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">立即注册</el-button>
-                <el-button @click="$router.push('/login')">登录</el-button>
+                <el-button @click="$router.push('/')">登录</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -47,6 +47,15 @@ export default {
             callback();
             }
         };
+        var validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+            callback(new Error('请再次输入密码'));
+            } else if (value !== this.ruleForm.pass) {
+            callback(new Error('两次输入密码不一致!'));
+            } else {
+            callback();
+            }
+        };
         return {
             ruleForm: {
                 pass: '',
@@ -56,6 +65,9 @@ export default {
             rules: {
                 pass: [
                     { validator: validatePass, trigger: 'blur' }
+                ],
+                checkPass: [
+                    { validator: validatePass2, trigger: 'blur' }
                 ],
                 group: [
                     { validator: checkGroup, trigger: 'blur' }
@@ -78,6 +90,6 @@ export default {
     }
 </script>
 
-<style lang='sass' scoped>
+<style lang='scss' scoped>
 
 </style>

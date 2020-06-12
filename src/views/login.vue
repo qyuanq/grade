@@ -1,40 +1,44 @@
 <template>
-    <div>
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-             <el-form-item label="组别" prop="group">
-                <el-input v-model.number="ruleForm.age"></el-input>
+    <div class="container">
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" enctype="multipart/form-data">
+            <el-form-item label="分组" prop="group">
+                <el-select v-model="ruleForm.group" placeholder="请选择" class="select" ref="group">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="共几组" prop="count">
+                <el-select v-model="ruleForm.count" placeholder="请选择" class="select">
+                    <el-option v-for="item in counts" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+                <el-input type="password" placeholder="请输入密码" v-model="ruleForm.pass" autocomplete="off" class="pwd"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                <el-button type="danger" @click="$router.push('/register')">注册</el-button>
+                <!-- <el-button type="danger" @click="$router.push('/register')">注册</el-button> -->
             </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script>
-// import register from './register.vue'
+import {SERVER} from '@/config' 
 export default {
-   
     data () {
          var checkGroup = (rule, value, callback) => {
             if (!value) {
-            return callback(new Error('组不能为空'));
+            return callback(new Error('请填写第几组'));
+            }else{
+                 callback();
             }
-            setTimeout(() => {
-            if (!Number.isInteger(value)) {
-                callback(new Error('请输入数字值'));
-            } else {
-                if (value < 18) {
-                callback(new Error('必须年满18岁'));
-                } else {
-                callback();
-                }
+        };
+        var checkCount = (rule, value, callback) => {
+            if (!value) {
+            return callback(new Error('请填写共有几组'));
+            }else{
+                 callback();
             }
-            }, 1000);
         };
         var validatePass = (rule, value, callback) => {
             if (value === '') {
@@ -46,49 +50,92 @@ export default {
             callback();
             }
         };
-        var validatePass2 = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请再次输入密码'));
-            } else if (value !== this.ruleForm.pass) {
-            callback(new Error('两次输入密码不一致!'));
-            } else {
-            callback();
-            }
-        };
         return {
+            options: [{
+                value: 'group1',
+                label: '第一组'
+                }, {
+                value: 'group2',
+                label: '第二组'
+                }, {
+                value: 'group3',
+                label: '第三组'
+                }, {
+                value: 'group4',
+                label: '第四组'
+                }, {
+                value: 'group5',
+                label: '第五组'
+            }],
+            counts: [{
+                value: 'count1',
+                label: '一'
+                }, {
+                value: 'count2',
+                label: '二'
+                }, {
+                value: 'count3',
+                label: '三'
+                }, {
+                value: 'count4',
+                label: '四'
+                }, {
+                value: 'count5',
+                label: '五'
+            }],
+
             ruleForm: {
                 pass: '',
                 checkPass: '',
-                age: ''
+                group: '',
+                count:''
             },
             rules: {
                 pass: [
                     { validator: validatePass, trigger: 'blur' }
                 ],
-                checkPass: [
-                    { validator: validatePass2, trigger: 'blur' }
-                ],
                 group: [
                     { validator: checkGroup, trigger: 'blur' }
+                ],
+                count:[
+                    { validator: checkCount, trigger: 'blur' }
                 ]
-            }
+            },
+            SERVER
         }
       },
       methods:{
-        submitForm(formName) {
+        submitForm(formName) {    
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                alert('submit!');
+                let formdata = new FormData(this.$refs[formName])
+                //  alert('submit!');
+                this.axios.post(SERVER + 'api/login',{
+                    formdata
+                }).then(res => {
+                    if(res.err){
+                    alert(res.msg);
+                }else{
+                    localStorage.group = this.ruleForm.group;
+                    this.$router.push('/index');
+                }
+                })
             } else {
                 console.log('error submit!!');
                 return false;
             }
-            });
+         });
         }
       }
     }
 </script>
 
-<style lang='sass' scoped>
+<style lang='scss' scoped>
+.container{
+    width:600px;
+    margin:100px auto 0;
+    .select{width:80%;}
+    .pwd{width:80%;}
+}
 
 </style>

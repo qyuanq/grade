@@ -1,21 +1,23 @@
 <template>
   <div id="app">
-    <login></login>
+    <!-- <login></login> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import login from "./views/login.vue";
+// import login from "./views/login.vue";
 
 export default {
   name: "app",
   components: {
-    login
+    // login
   }
 };
 </script>
 
 <style>
+body{background:#ebedf0;}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
