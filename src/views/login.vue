@@ -1,18 +1,18 @@
 <template>
     <div class="container">
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" enctype="multipart/form-data">
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
             <el-form-item label="分组" prop="group">
-                <el-select v-model="ruleForm.group" placeholder="请选择" class="select" ref="group">
+                <el-select v-model="ruleForm.group" placeholder="请选择" name="group" class="select" ref="group">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="共几组" prop="count">
-                <el-select v-model="ruleForm.count" placeholder="请选择" class="select">
+                <el-select v-model="ruleForm.count" placeholder="请选择" name="count" class="select">
                     <el-option v-for="item in counts" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="密码" prop="pass">
-                <el-input type="password" placeholder="请输入密码" v-model="ruleForm.pass" autocomplete="off" class="pwd"></el-input>
+                <el-input type="password" placeholder="请输入密码" name="pass" v-model="ruleForm.pass" autocomplete="off" class="pwd"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -66,21 +66,25 @@ export default {
                 }, {
                 value: 'group5',
                 label: '第五组'
-            }],
+                },{
+                value: 't1',
+                label: '教师'
+                }
+            ],
             counts: [{
-                value: 'count1',
+                value: 1,
                 label: '一'
                 }, {
-                value: 'count2',
+                value: 2,
                 label: '二'
                 }, {
-                value: 'count3',
+                value: 3,
                 label: '三'
                 }, {
-                value: 'count4',
+                value: 4,
                 label: '四'
                 }, {
-                value: 'count5',
+                value: 5,
                 label: '五'
             }],
 
@@ -88,7 +92,7 @@ export default {
                 pass: '',
                 checkPass: '',
                 group: '',
-                count:''
+                count:null
             },
             rules: {
                 pass: [
@@ -108,15 +112,18 @@ export default {
         submitForm(formName) {    
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                let formdata = new FormData(this.$refs[formName])
-                //  alert('submit!');
-                this.axios.post(SERVER + 'api/login',{
-                    formdata
-                }).then(res => {
-                    if(res.err){
-                    alert(res.msg);
+                let formdata = new FormData();
+                formdata.append('group',this.ruleForm.group);
+                formdata.append('count',this.ruleForm.count);
+                formdata.append('password',this.ruleForm.pass);
+                this.axios.post(SERVER + 'api/login',formdata
+                ).then(res => {
+                    if(res.data.err){
+                    alert(res.data.msg);
                 }else{
+                    localStorage.count = this.ruleForm.count;
                     localStorage.group = this.ruleForm.group;
+                    // localStorage.setItem("group", this.ruleForm.group);
                     this.$router.push('/index');
                 }
                 })
