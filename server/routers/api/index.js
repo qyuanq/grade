@@ -42,10 +42,9 @@ router.post('/addgrade',async ctx=>{
     let subject4 =grade7;
     let subject5 =grade8;
     let score = grade1 + grade2 + grade3 + grade4 + grade5 + grade6 + grade7 + grade8
-    console.log(post);
     
     await ctx.db.query('INSERT INTO grade_table(category,subject1,subject2,subject3,subject4,subject5,groups,grade1,grade2,grade3,grade4,grade5,grade6,grade7,grade8,score) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[post['category'],subject1,subject2,subject3,subject4,subject5,post['groups'],grade1,grade2,grade3,grade4,grade5,grade6,grade7,grade8,score])
-    ctx.body={err:1,msg:"1111"};
+    ctx.body={err:1,msg:"添加成功"};
 });
 
 router.get('/rank/:count',async ctx=>{
@@ -103,7 +102,7 @@ router.get('/rank/:count',async ctx=>{
         subject3 = rows1[i]['subject3'];
         subject4 = rows1[i]['subject4'];
         subject5 = rows1[i]['subject5'];
-        console.log(rows1[i]['category'],rows1[i]['groups'])
+        // console.log(rows1[i]['category'],rows1[i]['groups'])
         if(rows1[i]['category'] === rows1[i]['groups']){
             score =score * 0.3
             subject1 =  subject1 * 0.3
@@ -139,16 +138,16 @@ router.get('/rank/:count',async ctx=>{
     group1_sub3 = Number(group1_sub3.toFixed(2))
     group1_sub4 = Number(group1_sub4.toFixed(2))
     group1_sub5 = Number(group1_sub5.toFixed(2))
-    console.log(group1_sub1,group1_sub2,group1_sub3,group1_sub4,group1_sub5)
+    
     
     let rows2 = await ctx.db.query("SELECT * FROM grade_table WHERE groups=? order by id desc limit ?",['group2',count+1])
     for(let i=0; i<=count; i++){
         score = rows2[i]['score'];
-        subject1 = rows1[i]['subject1'];
-        subject2 = rows1[i]['subject2'];
-        subject3 = rows1[i]['subject3'];
-        subject4 = rows1[i]['subject4'];
-        subject5 = rows1[i]['subject5'];
+        subject1 = rows2[i]['subject1'];
+        subject2 = rows2[i]['subject2'];
+        subject3 = rows2[i]['subject3'];
+        subject4 = rows2[i]['subject4'];
+        subject5 = rows2[i]['subject5'];
         if(rows2[i]['category'] === rows2[i]['groups']){
             score = score * 0.3
             subject1 =  subject1 * 0.3
@@ -188,11 +187,11 @@ router.get('/rank/:count',async ctx=>{
     let rows3 = await ctx.db.query("SELECT * FROM grade_table WHERE groups=? order by id desc limit ?",['group3',count+1])
     for(let i=0; i<=count; i++){
         score = rows3[i]['score'];
-        subject1 = rows1[i]['subject1'];
-        subject2 = rows1[i]['subject2'];
-        subject3 = rows1[i]['subject3'];
-        subject4 = rows1[i]['subject4'];
-        subject5 = rows1[i]['subject5'];
+        subject1 = rows3[i]['subject1'];
+        subject2 = rows3[i]['subject2'];
+        subject3 = rows3[i]['subject3'];
+        subject4 = rows3[i]['subject4'];
+        subject5 = rows3[i]['subject5'];
         if(rows3[i]['category'] === rows3[i]['groups']){
             score = score * 0.3
             subject1 =  subject1 * 0.3
@@ -232,11 +231,11 @@ router.get('/rank/:count',async ctx=>{
     let rows4 = await ctx.db.query("SELECT * FROM grade_table WHERE groups=? order by id desc limit ?",['group4',count+1])
     for(let i=0; i<=count; i++){
         score = rows4[i]['score'];
-        subject1 = rows1[i]['subject1'];
-        subject2 = rows1[i]['subject2'];
-        subject3 = rows1[i]['subject3'];
-        subject4 = rows1[i]['subject4'];
-        subject5 = rows1[i]['subject5'];
+        subject1 = rows4[i]['subject1'];
+        subject2 = rows4[i]['subject2'];
+        subject3 = rows4[i]['subject3'];
+        subject4 = rows4[i]['subject4'];
+        subject5 = rows4[i]['subject5'];
         if(rows4[i]['category'] === rows4[i]['groups']){
             score = score * 0.3
             subject1 =  subject1 * 0.3
@@ -244,7 +243,6 @@ router.get('/rank/:count',async ctx=>{
             subject3 =  subject3 * 0.3
             subject4 =  subject4 * 0.3
             subject5 =  subject5 * 0.3
-            console.log(score)
         }else if(rows4[i]['category'] === 't1'){
             score = score * 0.4
             subject1 =  subject1 * 0.4
@@ -252,7 +250,6 @@ router.get('/rank/:count',async ctx=>{
             subject3 =  subject3 * 0.4
             subject4 =  subject4 * 0.4
             subject5 =  subject5 * 0.4
-            console.log(score)
         }else{
             score = score * (0.3 * 1000 / (count-1) / 1000)
             subject1 =  subject1 * (0.3 * 1000 / (count-1) / 1000)
@@ -260,7 +257,6 @@ router.get('/rank/:count',async ctx=>{
             subject3 =  subject3 * (0.3 * 1000 / (count-1) / 1000)
             subject4 =  subject4 * (0.3 * 1000 / (count-1) / 1000)
             subject5 =  subject5 * (0.3 * 1000 / (count-1) / 1000)
-            console.log(score)
         }
         sum4 = sum4 + score;
         group4_sub1 = group4_sub1 + subject1;
@@ -279,6 +275,11 @@ router.get('/rank/:count',async ctx=>{
     let rows5 = await ctx.db.query("SELECT * FROM grade_table WHERE groups=? order by id desc limit ?",['group5',count+1])
     for(let i=0; i<=count; i++){
         let score = rows5[i]['score'];
+        subject1 = rows5[i]['subject1'];
+        subject2 = rows5[i]['subject2'];
+        subject3 = rows5[i]['subject3'];
+        subject4 = rows5[i]['subject4'];
+        subject5 = rows5[i]['subject5'];
         if(rows5[i]['category'] === rows5[i]['groups']){
             score = score * 0.3
             subject1 =  subject1 * 0.3
@@ -307,6 +308,7 @@ router.get('/rank/:count',async ctx=>{
         group5_sub3 = group5_sub3 + subject3;
         group5_sub4 = group5_sub4 + subject4;
         group5_sub5 = group5_sub5 + subject5;
+        console.log(group5_sub1,group5_sub2,group5_sub3,group5_sub4,group5_sub5)
     }
     sum5 = Number(sum5.toFixed(2))
     group5_sub1 = Number(group5_sub1.toFixed(2))
@@ -314,14 +316,15 @@ router.get('/rank/:count',async ctx=>{
     group5_sub3 = Number(group5_sub3.toFixed(2))
     group5_sub4 = Number(group5_sub4.toFixed(2))
     group5_sub5 = Number(group5_sub5.toFixed(2))
+    console.log(group5_sub1,group5_sub2,group5_sub3,group5_sub4,group5_sub5)
 
     // 五维数据
     let json = [
-        {'data':[group1_sub1,group1_sub2,group1_sub3,group1_sub4,group1_sub5]},
-        {'data':[group2_sub1,group2_sub2,group2_sub3,group2_sub4,group2_sub5]},
-        {'data':[group3_sub1,group3_sub2,group3_sub3,group3_sub4,group3_sub5]},
-        {'data':[group4_sub1,group4_sub2,group4_sub3,group4_sub4,group4_sub5]},
-        {'data':[group5_sub1,group5_sub2,group5_sub3,group5_sub4,group5_sub5]}
+        {'name':'第一组','values':[group1_sub1,group1_sub2,group1_sub3,group1_sub4,group1_sub5]},
+        {'name':'第二组','values':[group2_sub1,group2_sub2,group2_sub3,group2_sub4,group2_sub5]},
+        {'name':'第三组','values':[group3_sub1,group3_sub2,group3_sub3,group3_sub4,group3_sub5]},
+        {'name':'第四组','values':[group4_sub1,group4_sub2,group4_sub3,group4_sub4,group4_sub5]},
+        {'name':'第五组','values':[group5_sub1,group5_sub2,group5_sub3,group5_sub4,group5_sub5]}
     ]
 
     let res = [
@@ -347,7 +350,7 @@ router.get('/rank/:count',async ctx=>{
     arr.forEach((item,i)=>{
         item.rank=i+1;
     })
-    console.log(json)
+    console.log(pics)
     
     ctx.body={arr,pics};
 })

@@ -144,5 +144,7 @@ export default {
     .select{width:80%;}
     .pwd{width:80%;}
 }
-
+@media (max-width:767.98px){
+    .container{width:100%;}
+}
 </style>
