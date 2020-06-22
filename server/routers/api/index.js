@@ -138,6 +138,7 @@ router.get('/rank/:count',async ctx=>{
     group1_sub3 = Number(group1_sub3.toFixed(2))
     group1_sub4 = Number(group1_sub4.toFixed(2))
     group1_sub5 = Number(group1_sub5.toFixed(2))
+    console.log(sum1);
     
     
     let rows2 = await ctx.db.query("SELECT * FROM grade_table WHERE groups=? order by id desc limit ?",['group2',count+1])

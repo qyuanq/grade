@@ -21,7 +21,17 @@ export default {
             pieData:[],
             legend_data:[],
             values:[],
-            sum:['一组','二组','三组','四组','五组']
+            sum:['一组','二组','三组','四组','五组'],
+            radar:[],
+            indicator: [
+                {text: '工程设计思维', max: 40},
+                {text: '工程实践能力', max: 20},
+                {text: '信息技术素养', max: 20},
+                {text: '创新革新意思', max: 10},
+                {text: '沟通协作能力', max: 10}
+            ],
+            radius: 80,
+            series:[]
         }
       },
       async created(){
@@ -36,13 +46,23 @@ export default {
             this.legend_data.push(this.pieData[i].name)
             this.values.push(this.pieData[i].values)
         }
+        //radar
+        let pos = 250;
+        for(let i = 0;i<this.count;i++){
+            let sum = pos + 'px';
+            this.radar.push({indicator:this.indicator,center:['50%', sum],radius:this.radius})
+             // series
+            this.series.push({type: 'radar',tooltip: {trigger: 'item'},areaStyle: {},data:{value:this.values[i],name:this.legend_data[i]}})
+            pos = pos + 250
+        }
+       
          this.drawPie();
       },
       methods:{
           drawPie(){
             // 基于准备好的dom，初始化echarts图表
             let myChart = echarts.init(document.getElementById('main'));
-           myChart.setOption({
+            myChart.setOption({
                 title: {
                     text: '综合评价'
                 },
@@ -54,63 +74,7 @@ export default {
                     orient: 'vertical',
                     data: this.legend_data
                 },
-                radar: [
-                    {
-                        indicator: [
-                            {text: '工程设计思维', max: 40},
-                            {text: '工程实践能力', max: 20},
-                            {text: '信息技术素养', max: 20},
-                            {text: '创新革新意思', max: 10},
-                            {text: '沟通协作能力', max: 10}
-                        ],
-                        center: ['50%', '250px'],
-                        radius: 80
-                    },
-                    {
-                        indicator: [
-                            {text: '工程设计思维', max: 40},
-                            {text: '工程实践能力', max: 20},
-                            {text: '信息技术素养', max: 20},
-                            {text: '创新革新意思', max: 10},
-                            {text: '沟通协作能力', max: 10}
-                        ],
-                        center: ['50%', '500px'],
-                        radius: 80
-                    },
-                    {
-                        indicator: [
-                            {text: '工程设计思维', max: 40},
-                            {text: '工程实践能力', max: 20},
-                            {text: '信息技术素养', max: 20},
-                            {text: '创新革新意思', max: 10},
-                            {text: '沟通协作能力', max: 10}
-                        ],
-                        center: ['50%', '750px'],
-                        radius: 80
-                    },
-                    {
-                        indicator: [
-                            {text: '工程设计思维', max: 40},
-                            {text: '工程实践能力', max: 20},
-                            {text: '信息技术素养', max: 20},
-                            {text: '创新革新意思', max: 10},
-                            {text: '沟通协作能力', max: 10}
-                        ],
-                        center: ['50%', '1000px'],
-                        radius: 80
-                    },
-                    {
-                        indicator: [
-                            {text: '工程设计思维', max: 40},
-                            {text: '工程实践能力', max: 20},
-                            {text: '信息技术素养', max: 20},
-                            {text: '创新革新意思', max: 10},
-                            {text: '沟通协作能力', max: 10}
-                        ],
-                        center: ['50%', '1250px'],
-                        radius: 80
-                    }
-                ],
+                radar: this.radar,
                 series: [
                     {
                         type: 'radar',

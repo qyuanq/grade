@@ -42,12 +42,13 @@ export default {
         };
         var validatePass = (rule, value, callback) => {
             if (value === '') {
-            callback(new Error('请输入密码'));
-            } else {
-            if (this.ruleForm.checkPass !== '') {
-                this.$refs.ruleForm.validateField('checkPass');
-            }
-            callback();
+                callback(new Error('请输入密码'));
+            } else if(this.result){
+                console.log(this.result)
+                callback(new Error("密码错误"));
+                this.result = '';
+            }else{
+                callback();
             }
         };
         return {
@@ -105,7 +106,8 @@ export default {
                     { validator: checkCount, trigger: 'blur' }
                 ]
             },
-            SERVER
+            SERVER,
+            result:''
         }
       },
       methods:{
@@ -119,7 +121,7 @@ export default {
                 this.axios.post(SERVER + 'api/login',formdata
                 ).then(res => {
                     if(res.data.err){
-                    alert(res.data.msg);
+                    this.result = res.data.err
                 }else{
                     localStorage.count = this.ruleForm.count;
                     localStorage.group = this.ruleForm.group;

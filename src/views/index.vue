@@ -103,6 +103,7 @@ export default {
           submitRank(){
               this.$router.push('/rank');
           }
+          
       }
     }
 </script>
